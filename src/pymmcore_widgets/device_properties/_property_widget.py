@@ -154,6 +154,8 @@ class ChoiceWidget(QComboBox):
             self.clear()
             try:
                 allowed = list(self._get_allowed())
+                # transform int of user state to string
+                allowed = [str(x) if isinstance(x, int) else x for x in allowed]
                 with contextlib.suppress(ValueError):
                     # natural sort for numbers
                     allowed.sort(key=float)
@@ -177,7 +179,7 @@ class ChoiceWidget(QComboBox):
         """Get value."""
         return self.currentText()  # type: ignore [no-any-return]
 
-    def setValue(self, value: str) -> None:
+    def setValue(self, value: str | int) -> None:
         # sourcery skip: remove-unnecessary-cast
         """Set current value."""
         value = str(value)
