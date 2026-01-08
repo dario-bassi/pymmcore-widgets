@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pymmcore_plus import CMMCorePlus
+from pymmcore_plus.experimental.unicore import UniMMCore
 from qtpy.QtWidgets import QComboBox, QVBoxLayout, QWidget
 
 from pymmcore_widgets._util import ComboMessageBox
@@ -44,10 +45,10 @@ class ChannelWidget(QWidget):
         channel_group: str | None = None,
         *,
         parent: QWidget | None = None,
-        mmcore: CMMCorePlus | None = None,
+        mmcore: CMMCorePlus | UniMMCore | None = None,
     ) -> None:
         super().__init__(parent=parent)
-        self._mmc = mmcore or CMMCorePlus.instance()
+        self._mmc = mmcore or UniMMCore() or CMMCorePlus.instance()
 
         self._channel_group = channel_group or self._get_channel_group()
 

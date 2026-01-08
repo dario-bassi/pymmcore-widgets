@@ -4,6 +4,7 @@ from logging import getLogger
 from typing import TYPE_CHECKING, cast
 
 from pymmcore_plus import CMMCorePlus, DeviceProperty, DeviceType
+from pymmcore_plus.experimental.unicore import UniMMCore
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QAbstractScrollArea, QTableWidget, QTableWidgetItem, QWidget
@@ -44,7 +45,7 @@ class DevicePropertyTable(QTableWidget):
         parent: QWidget | None = None,
         *,
         enable_property_widgets: bool = True,
-        mmcore: CMMCorePlus | None = None,
+        mmcore: CMMCorePlus | UniMMCore | None = None,
         connect_core: bool = True,
     ):
         rows = 0
@@ -54,7 +55,7 @@ class DevicePropertyTable(QTableWidget):
         self._prop_widgets_enabled: bool = enable_property_widgets
         self._connect_core = connect_core
 
-        self._mmc = mmcore or CMMCorePlus.instance()
+        self._mmc = mmcore or UniMMCore() or CMMCorePlus.instance()
         self._mmc.events.systemConfigurationLoaded.connect(self._rebuild_table)
 
         # If we enable these, then the edit group dialog will lose all of it's checks

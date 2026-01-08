@@ -3,6 +3,7 @@ from __future__ import annotations
 import warnings
 
 from pymmcore_plus import CMMCorePlus, DeviceType
+from pymmcore_plus.experimental.unicore import UniMMCore
 from qtpy.QtWidgets import QComboBox, QHBoxLayout, QWidget
 from superqt.utils import signals_blocked
 
@@ -32,11 +33,11 @@ class PresetsWidget(QWidget):
         group: str,
         *,
         parent: QWidget | None = None,
-        mmcore: CMMCorePlus | None = None,
+        mmcore: CMMCorePlus | UniMMCore | None = None,
     ) -> None:
         super().__init__(parent=parent)
 
-        self._mmc = mmcore or CMMCorePlus.instance()
+        self._mmc = mmcore or UniMMCore() or CMMCorePlus.instance()
 
         self._group = group
 

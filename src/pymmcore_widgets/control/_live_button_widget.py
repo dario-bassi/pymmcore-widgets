@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Union
 
 from pymmcore_plus import CMMCorePlus
+from pymmcore_plus.experimental.unicore import UniMMCore
 from qtpy.QtCore import QSize, Qt
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QPushButton, QWidget
@@ -49,11 +50,11 @@ class LiveButton(QPushButton):
         self,
         *,
         parent: QWidget | None = None,
-        mmcore: CMMCorePlus | None = None,
+        mmcore: CMMCorePlus | UniMMCore | None = None,
     ) -> None:
         super().__init__(parent=parent)
 
-        self._mmc = mmcore or CMMCorePlus.instance()
+        self._mmc = mmcore or UniMMCore() or CMMCorePlus.instance()
         self._button_text_on: str = "Live"
         self._button_text_off: str = "Stop"
         self._icon_color_on: COLOR_TYPE = "green"

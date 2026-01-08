@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Literal
 
 from pymmcore_plus import CMMCorePlus
-
 from pymmcore_widgets.useq_widgets._z import ROW_TOP_BOTTOM, Mode, ZPlanWidget
 
 from ._xy_bounds import MarkVisit
@@ -37,7 +36,7 @@ class CoreConnectedZPlanWidget(ZPlanWidget):
         )
 
         super().__init__(parent)
-        self._mmc = mmcore or CMMCorePlus.instance()
+        self._mmc = mmcore or UniMMCore() or CMMCorePlus.instance()
 
         self.bottom_btn.mark.clicked.connect(self._mark_bottom)
         self.top_btn.mark.clicked.connect(self._mark_top)

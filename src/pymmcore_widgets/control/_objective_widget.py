@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pymmcore_plus import CMMCorePlus
+from pymmcore_plus.experimental.unicore import UniMMCore
 from qtpy.QtWidgets import QComboBox, QHBoxLayout, QLabel, QSizePolicy, QWidget
 
 from pymmcore_widgets._deprecated._device_widget import StateDeviceWidget
@@ -38,7 +39,7 @@ class ObjectivesWidget(QWidget):
         mmcore: CMMCorePlus | None = None,
     ):
         super().__init__(parent=parent)
-        self._mmc = mmcore or CMMCorePlus.instance()
+        self._mmc = mmcore or UniMMCore() or CMMCorePlus.instance()
         self._objective_device = objective_device or guess_objective_or_prompt(
             self._mmc, parent=self
         )

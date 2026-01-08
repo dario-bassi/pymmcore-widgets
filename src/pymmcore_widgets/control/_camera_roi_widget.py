@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from typing import Any, NamedTuple
 
 from pymmcore_plus import CMMCorePlus, DeviceType
+from pymmcore_plus.experimental.unicore import UniMMCore
 from qtpy.QtCore import QSize, Qt, Signal
 from qtpy.QtWidgets import (
     QAbstractSpinBox,
@@ -76,11 +77,11 @@ class CameraRoiWidget(QWidget):
         self,
         parent: QWidget | None = None,
         *,
-        mmcore: CMMCorePlus | None = None,
+        mmcore: CMMCorePlus | UniMMCore | None = None,
     ) -> None:
         super().__init__(parent=parent)
 
-        self._mmc = mmcore or CMMCorePlus.instance()
+        self._mmc = mmcore or UniMMCore() or CMMCorePlus.instance()
 
         # this is use to store each camera information so that when the camera is
         # changed in the widget, the proper values can be updated.

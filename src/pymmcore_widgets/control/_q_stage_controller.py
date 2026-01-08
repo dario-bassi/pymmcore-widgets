@@ -4,6 +4,7 @@ import weakref
 from typing import ClassVar, cast
 
 from pymmcore_plus import AbstractChangeAccumulator, CMMCorePlus, core
+from pymmcore_plus.experimental.unicore import UniMMCore
 from qtpy.QtCore import QObject, QTimerEvent, Signal
 
 
@@ -32,10 +33,10 @@ class QStageMoveAccumulator(QObject):
 
     @classmethod
     def for_device(
-        cls, device: str, mmcore: CMMCorePlus | None = None
+        cls, device: str, mmcore: CMMCorePlus | UniMMCore | None = None
     ) -> QStageMoveAccumulator:
         """Get a stage controller for the given device."""
-        mmcore = mmcore or CMMCorePlus.instance()
+        mmcore = mmcore or UniMMCore() or CMMCorePlus.instance()
         key = (id(mmcore), device)
         if key not in cls._CACHE:
             dev_obj = mmcore.getDeviceObject(device)

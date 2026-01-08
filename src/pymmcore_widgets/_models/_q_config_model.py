@@ -19,6 +19,7 @@ if TYPE_CHECKING:
     from collections.abc import Iterable
 
     from pymmcore_plus import CMMCorePlus
+    from pymmcore_plus.experimental.unicore import UniMMCore
     from typing_extensions import Self
 
 NULL_INDEX = QModelIndex()
@@ -36,7 +37,7 @@ class QConfigGroupsModel(_BaseTreeModel):
     """Three-level model: root → groups → presets → settings."""
 
     @classmethod
-    def create_from_core(cls, core: CMMCorePlus) -> Self:
+    def create_from_core(cls, core: CMMCorePlus | UniMMCore) -> Self:
         return cls(get_config_groups(core))
 
     def __init__(self, groups: Iterable[ConfigGroup] | None = None) -> None:

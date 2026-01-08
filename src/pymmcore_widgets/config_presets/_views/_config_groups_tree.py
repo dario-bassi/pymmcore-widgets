@@ -10,6 +10,7 @@ from ._property_setting_delegate import PropertySettingDelegate
 
 if TYPE_CHECKING:
     from pymmcore_plus import CMMCorePlus
+    from pymmcore_plus.experimental.unicore import UniMMCore
     from qtpy.QtCore import QAbstractItemModel
 
 
@@ -18,9 +19,9 @@ class ConfigGroupsTree(QTreeView):
 
     @classmethod
     def create_from_core(
-        cls, core: CMMCorePlus, parent: QWidget | None = None
+        cls, core: CMMCorePlus | UniMMCore, parent: QWidget | None = None
     ) -> ConfigGroupsTree:
-        """Create a ConfigGroupsTree from a CMMCorePlus instance."""
+        """Create a ConfigGroupsTree from a CMMCorePlus or UniMMCore instance."""
         obj = cls(parent)
         model = QConfigGroupsModel.create_from_core(core)
         obj.setModel(model)

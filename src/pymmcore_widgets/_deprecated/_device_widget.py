@@ -4,6 +4,7 @@ from abc import abstractmethod
 from typing import Any
 
 from pymmcore_plus import CMMCorePlus, DeviceType, Keyword
+from pymmcore_plus.experimental.unicore import UniMMCore
 from qtpy.QtWidgets import QComboBox, QHBoxLayout, QWidget
 from superqt.utils import signals_blocked
 
@@ -29,8 +30,8 @@ class DeviceWidget(QWidget):
         A device label for which to create a widget.
     parent : QWidget | None
         Optional parent widget.
-    mmcore: CMMCorePlus | None
-        Optional [`CMMCorePlus`][pymmcore_plus.CMMCorePlus] micromanager core.
+    mmcore: CMMCorePlus | UniMMCore | None
+        Optional [`CMMCorePlus`][pymmcore_plus.CMMCorePlus] or [`UniMMCore`][pymmcore_plus.experimental.unicore.UniMMCore] micromanager core.
         By default, None. If not specified, the widget will use the active
         (or create a new)
         [`CMMCorePlus.instance`][pymmcore_plus.core._mmcore_plus.CMMCorePlus.instance].
@@ -41,11 +42,11 @@ class DeviceWidget(QWidget):
         device_label: str,
         *,
         parent: QWidget | None = None,
-        mmcore: CMMCorePlus | None = None,
+        mmcore: CMMCorePlus | UniMMCore | None = None,
     ) -> None:
         super().__init__(parent=parent)
         self._device_label = device_label
-        self._mmc = mmcore or CMMCorePlus.instance()
+        self._mmc = mmcore or UniMMCore() or CMMCorePlus.instance()
         self.destroyed.connect(self._disconnect)
 
         # TODO:

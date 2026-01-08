@@ -15,11 +15,10 @@ class PropertyBrowser(QDialog):
     ----------
     parent : QWidget | None
         Optional parent widget. By default, None.
-    mmcore : CMMCorePlus | None
-        Optional [`pymmcore_plus.CMMCorePlus`][] micromanager core.
-        By default, None. If not specified, the widget will use the active
-        (or create a new)
-        [`CMMCorePlus.instance`][pymmcore_plus.core._mmcore_plus.CMMCorePlus.instance].
+    mmcore : CMMCorePlus | UniMMCore | None
+        Optional [`pymmcore_plus.CMMCorePlus`][] or [`pymmcore_plus.experimental.unicore.UniMMCore`][] micromanager core.
+        By default, None. If not specified, the widget will try to use UniMMCore,
+        or fall back to [`CMMCorePlus.instance`][pymmcore_plus.core._mmcore_plus.CMMCorePlus.instance].
     """
 
     def __init__(

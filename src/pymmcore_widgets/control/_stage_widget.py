@@ -101,7 +101,7 @@ class MoveStageSpinBox(QDoubleSpinBox):
 
 
 class HaltButton(QPushButton):
-    def __init__(self, device: str, core: CMMCorePlus, parent: QWidget | None = None):
+    def __init__(self, device: str, core: CMMCorePlus | UniMMCore, parent: QWidget | None = None):
         super().__init__(parent=parent)
         self._device = device
         self._core = core
@@ -224,11 +224,11 @@ class StageWidget(QWidget):
         absolute_positioning: bool = False,
         position_label_below: bool = True,
         parent: QWidget | None = None,
-        mmcore: CMMCorePlus | None = None,
+        mmcore: CMMCorePlus | UniMMCore | None = None,
     ):
         super().__init__(parent=parent)
 
-        self._mmc = mmcore or CMMCorePlus.instance()
+        self._mmc = mmcore or UniMMCore() or CMMCorePlus.instance()
         self._levels = levels
         self._device = device
         self._poll_timer_id: int | None = None

@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, cast
 
 from pymmcore_plus import CMMCorePlus, Keyword
+from pymmcore_widgets._util import get_core_singleton
 from qtpy.QtCore import QSize, Qt
 from qtpy.QtWidgets import (
     QBoxLayout,
@@ -37,6 +38,7 @@ from ._save_widget import SaveGroupBox
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
+    from pymmcore_plus.experimental.unicore import UniMMCore
     from pymmcore_plus.mda import SupportsFrameReady
 
 
@@ -44,7 +46,7 @@ class _CoreConnectedPositionTable(CoreConnectedPositionTable):
     def __init__(
         self,
         rows: int = 0,
-        mmcore: CMMCorePlus | None = None,
+        mmcore: "CMMCorePlus | UniMMCore | None" = None,
         parent: QWidget | None = None,
     ):
         super().__init__(rows, mmcore, parent)
@@ -107,10 +109,10 @@ class MDAWidget(MDASequenceWidget):
     """
 
     def __init__(
-        self, *, parent: QWidget | None = None, mmcore: CMMCorePlus | None = None
+        self, *, parent: QWidget | None = None, mmcore: "CMMCorePlus | UniMMCore | None" = None
     ) -> None:
         # create a couple core-connected variants of the tab widgets
-        self._mmc = mmcore or CMMCorePlus.instance()
+        self._mmc = get_core_singleton(mmcore)
 
         super().__init__(parent=parent, tab_widget=CoreMDATabs(None, self._mmc))
 

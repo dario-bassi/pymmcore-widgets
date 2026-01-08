@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Union
 
 from pymmcore_plus import CMMCorePlus
+from pymmcore_plus.experimental.unicore import UniMMCore
 from qtpy.QtCore import QSize, Qt
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QPushButton, QSizePolicy, QWidget
@@ -48,7 +49,7 @@ class SnapButton(QPushButton):
         self,
         *,
         parent: QWidget | None = None,
-        mmcore: CMMCorePlus | None = None,
+        mmcore: CMMCorePlus | UniMMCore | None = None,
     ) -> None:
         super().__init__(parent=parent)
 
@@ -56,7 +57,7 @@ class SnapButton(QPushButton):
             QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
         )
 
-        self._mmc = mmcore or CMMCorePlus.instance()
+        self._mmc = mmcore or UniMMCore() or CMMCorePlus.instance()
 
         self._mmc.events.systemConfigurationLoaded.connect(self._on_system_cfg_loaded)
         self._on_system_cfg_loaded()

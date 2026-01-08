@@ -8,6 +8,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, cast
 
 from pymmcore_plus import CMMCorePlus
+from pymmcore_plus.experimental.unicore import UniMMCore
 from qtpy.QtWidgets import QGridLayout, QLabel, QWidget
 
 from ._property_widget import PropertyWidget
@@ -58,12 +59,12 @@ class PropertiesWidget(QWidget):
         is_read_only: bool | None = None,
         is_sequenceable: bool | None = None,
         parent: QWidget | None = None,
-        mmcore: CMMCorePlus | None = None,
+        mmcore: CMMCorePlus | UniMMCore | None = None,
     ):
         super().__init__(parent=parent)
         self.setLayout(QGridLayout())
 
-        self._mmc = mmcore or CMMCorePlus.instance()
+        self._mmc = mmcore or CMMCorePlus.instance() or UniMMCore()
         self._mmc.events.systemConfigurationLoaded.connect(self.rebuild)
 
         self._property_type = property_type

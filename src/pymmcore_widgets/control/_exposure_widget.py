@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pymmcore_plus import CMMCorePlus, Keyword
+from pymmcore_plus.experimental.unicore import UniMMCore
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QApplication, QDoubleSpinBox, QHBoxLayout, QLabel, QWidget
 from superqt.utils import signals_blocked
@@ -34,11 +35,11 @@ class ExposureWidget(QWidget):
         camera: str | None = None,
         *,
         parent: QWidget | None = None,
-        mmcore: CMMCorePlus | None = None,
+        mmcore: CMMCorePlus | UniMMCore | None = None,
     ):
         super().__init__(parent=parent)
 
-        self._mmc = mmcore or CMMCorePlus.instance()
+        self._mmc = mmcore or UniMMCore() or CMMCorePlus.instance()
         self._camera = camera or self._mmc.getCameraDevice()
 
         self.label = QLabel()
@@ -115,7 +116,7 @@ class DefaultCameraExposureWidget(ExposureWidget):
         self,
         *,
         parent: QWidget | None = None,
-        mmcore: CMMCorePlus | None = None,
+        mmcore: CMMCorePlus | UniMMCore | None = None,
     ):
         super().__init__(parent=parent, mmcore=mmcore)
 

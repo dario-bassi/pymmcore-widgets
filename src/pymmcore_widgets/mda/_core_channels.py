@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from pymmcore_plus import CMMCorePlus
+from pymmcore_plus.experimental.unicore import UniMMCore
 
 from pymmcore_widgets.useq_widgets import ChannelTable
 
@@ -31,11 +32,11 @@ class CoreConnectedChannelTable(ChannelTable):
     def __init__(
         self,
         rows: int = 0,
-        mmcore: CMMCorePlus | None = None,
+        mmcore: CMMCorePlus | UniMMCore | None = None,
         parent: QWidget | None = None,
     ):
         super().__init__(rows, parent)
-        self._mmc = mmcore or CMMCorePlus.instance()
+        self._mmc = mmcore or UniMMCore() or CMMCorePlus.instance()
 
         # connections
         self._mmc.events.systemConfigurationLoaded.connect(self._update_channel_groups)

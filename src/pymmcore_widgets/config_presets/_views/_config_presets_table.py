@@ -20,6 +20,7 @@ from ._property_setting_delegate import PropertySettingDelegate
 
 if TYPE_CHECKING:
     from pymmcore_plus import CMMCorePlus
+    from pymmcore_plus.experimental.unicore import UniMMCore
     from PyQt6.QtGui import QAction
 
 else:

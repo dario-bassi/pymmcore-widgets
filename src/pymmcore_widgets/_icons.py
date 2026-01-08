@@ -61,6 +61,13 @@ class StandardIcon(str, Enum):
         """
         if isinstance(device_type, str):  # device label
             try:
+                try:
+                    from pymmcore_plus.experimental.unicore import UniMMCore
+                    device_type = UniMMCore().getDeviceType(device_type)
+                    if device_type is not None:
+                        return _DEVICE_TYPE_MAP.get(device_type, StandardIcon.DEVICE_UNKNOWN)
+                except (ImportError, Exception):
+                    pass
                 device_type = CMMCorePlus.instance().getDeviceType(device_type)
             except Exception:  # pragma: no cover
                 device_type = DeviceType.Unknown

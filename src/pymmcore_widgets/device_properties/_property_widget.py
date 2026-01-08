@@ -17,6 +17,7 @@ from pymmcore_plus import (
     Keyword,
     PropertyType,
 )
+from pymmcore_plus.experimental.unicore import UniMMCore
 from qtpy.QtCore import QEvent, QObject, Qt, Signal
 from qtpy.QtWidgets import (
     QAbstractSpinBox,
@@ -268,7 +269,7 @@ class ChoiceComboBox(QComboBox):
         finally:
             self.blockSignals(False)
 
-    def setValue(self, value: str) -> None:
+    def setValue(self, value: str | int) -> None:
         """Set the current value."""
         self.setCurrentText(str(value))
 
@@ -427,7 +428,7 @@ class PropertyWidget(QWidget):
         Property name.
     parent : QWidget | None
         Optional parent widget.
-    mmcore : CMMCorePlus | None
+    mmcore : CMMCorePlus | UniMMCore | None
         Optional core instance. If not provided, uses the global instance.
     connect_core : bool
         If True, widget changes update the core and vice versa.
@@ -441,12 +442,12 @@ class PropertyWidget(QWidget):
         prop_name: str,
         *,
         parent: QWidget | None = None,
-        mmcore: CMMCorePlus | None = None,
+        mmcore: CMMCorePlus | UniMMCore | None = None,
         connect_core: bool = True,
     ) -> None:
         super().__init__(parent)
 
-        self._mmc = mmcore or CMMCorePlus.instance()
+        self._mmc = mmcore or UniMMCore() or CMMCorePlus.instance()
         self._device = device_label
         self._prop = prop_name
         self._connect_core = connect_core

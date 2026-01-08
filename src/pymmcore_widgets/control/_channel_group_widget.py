@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pymmcore_plus import CMMCorePlus
+from pymmcore_plus.experimental.unicore import UniMMCore
 from qtpy.QtWidgets import QComboBox, QWidget
 from superqt.utils import signals_blocked
 
@@ -25,13 +26,13 @@ class ChannelGroupWidget(QComboBox):
         self,
         parent: QWidget | None = None,
         *,
-        mmcore: CMMCorePlus | None = None,
+        mmcore: CMMCorePlus | UniMMCore | None = None,
     ) -> None:
         super().__init__(parent)
 
         self.setSizeAdjustPolicy(QComboBox.SizeAdjustPolicy.AdjustToContents)
 
-        self._mmc = mmcore or CMMCorePlus.instance()
+        self._mmc = mmcore or UniMMCore() or CMMCorePlus.instance()
 
         self._mmc.events.systemConfigurationLoaded.connect(
             self._update_channel_group_combo

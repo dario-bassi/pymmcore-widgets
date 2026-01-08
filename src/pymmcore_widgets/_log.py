@@ -6,6 +6,7 @@ from contextlib import suppress
 from typing import TYPE_CHECKING
 
 from pymmcore_plus import CMMCorePlus
+from pymmcore_plus.experimental.unicore import UniMMCore
 from qtpy.QtCore import (
     QFileSystemWatcher,
     QObject,
@@ -116,10 +117,10 @@ class CoreLogWidget(QWidget):
         path: str | None = None,
         max_lines: int = 5_000,
         parent: QWidget | None = None,
-        mmcore: CMMCorePlus | None = None,
+        mmcore: CMMCorePlus | UniMMCore | None = None,
     ) -> None:
         super().__init__(parent)
-        self._mmcore = mmcore or CMMCorePlus().instance()
+        self._mmcore = mmcore or UniMMCore() or CMMCorePlus.instance()
         self.setWindowTitle("Log Console")
 
         # --- Log path ---
