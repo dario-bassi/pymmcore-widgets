@@ -54,7 +54,7 @@ class CoreConnectedPositionTable(PositionTable):
     def __init__(
         self,
         rows: int = 0,
-        mmcore: CMMCorePlus | UniMMCore | None = None,
+        mmcore: CMMCorePlus | None = None,
         parent: QWidget | None = None,
     ):
         # must come before __init__ since it is used in super()._on_use_af_toggled
@@ -62,7 +62,7 @@ class CoreConnectedPositionTable(PositionTable):
             key="af_btn", glyph="mdi:arrow-left", on_click=self._set_af_from_core
         )
         super().__init__(rows, parent)
-        self._mmc = mmcore or UniMMCore() or CMMCorePlus.instance()
+        self._mmc = mmcore or CMMCorePlus.instance()
 
         # add event filter for the af_per_position checkbox
         self.af_per_position.installEventFilter(self)

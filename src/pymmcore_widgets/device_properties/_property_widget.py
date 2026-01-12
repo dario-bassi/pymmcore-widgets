@@ -40,8 +40,8 @@ if TYPE_CHECKING:
 
         valueChanged = Signal()
 
-        def value(self) -> str | float: ...
-        def setValue(self, val: str | float) -> None: ...
+        def value(self) -> str | float | int: ...
+        def setValue(self, val: str | float | int) -> None: ...
         def setEnabled(self, enabled: bool) -> None: ...
         def deleteLater(self) -> None: ...
 
@@ -251,7 +251,7 @@ class ChoiceComboBox(QComboBox):
         self.currentTextChanged.connect(self.valueChanged.emit)
         _block_wheel(self)
 
-    def setChoices(self, choices: tuple[str, ...]) -> None:
+    def setChoices(self, choices: tuple[str | int, ...]) -> None:
         """Set the available choices."""
         current = self.currentText()
         self.blockSignals(True)
@@ -262,9 +262,11 @@ class ChoiceComboBox(QComboBox):
                 sorted_choices = sorted(choices, key=float)
             except ValueError:
                 sorted_choices = list(choices)
+            # Ensure all choices are string (special case of python StateDevice)
+            sorted_choices = [str(choice) for choice in sorted_choices]
             self.addItems(sorted_choices)
             # Restore previous selection if still valid
-            if current in choices:
+            if current in sorted_choices:
                 self.setCurrentText(current)
         finally:
             self.blockSignals(False)
@@ -556,6 +558,17 @@ class PropertyWidget(QWidget):
         """Handle widget value changes."""
         if self._connect_core:
             try:
+                # special handling of a python StateDevice
+                if (
+                    self._mmc.getDeviceType(self._device) == DeviceType.StateDevice
+                    and self._prop == "State"
+                ):
+                    try:
+                        self._mmc.setProperty(self._device, self._prop, int(value))
+                    except RuntimeError:
+                        self._mmc.setProperty(
+                            self._device, self._prop, value
+                        )  # if its not a python device
                 self._mmc.setProperty(self._device, self._prop, value)
             except (RuntimeError, ValueError):
                 # Reset to core value on error

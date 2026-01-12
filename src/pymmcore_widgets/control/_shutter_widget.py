@@ -4,7 +4,6 @@ import warnings
 from typing import Any, Union
 
 from pymmcore_plus import CMMCorePlus, DeviceType
-from pymmcore_widgets._util import get_core_singleton
 from qtpy.QtCore import QSize, Qt
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QCheckBox, QHBoxLayout, QPushButton, QSizePolicy, QWidget
@@ -49,11 +48,11 @@ class ShuttersWidget(QWidget):
         autoshutter: bool = True,
         *,
         parent: QWidget | None = None,
-        mmcore: "CMMCorePlus | UniMMCore | None" = None,
+        mmcore: CMMCorePlus | None = None,
     ) -> None:
         super().__init__(parent=parent)
 
-        self._mmc = get_core_singleton(mmcore)
+        self._mmc = mmcore or CMMCorePlus.instance()
 
         self.shutter_device = shutter_device
 

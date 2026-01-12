@@ -4,7 +4,6 @@ from functools import cache
 from typing import TYPE_CHECKING
 
 from pymmcore_plus import CMMCorePlus, DeviceType
-from pymmcore_plus.experimental.unicore import UniMMCore
 
 from ._py_config_model import ConfigGroup, ConfigPreset, Device, DevicePropertySetting
 
@@ -16,7 +15,7 @@ if TYPE_CHECKING:
 
 
 @cache
-def _get_device(core: CMMCorePlus | UniMMCore, label: str) -> Device:
+def _get_device(core: CMMCorePlus, label: str) -> Device:
     """Get a Device model for the given label."""
     return Device(
         label=label,
@@ -27,7 +26,7 @@ def _get_device(core: CMMCorePlus | UniMMCore, label: str) -> Device:
     )
 
 
-def get_config_groups(core: CMMCorePlus | UniMMCore) -> Iterable[ConfigGroup]:
+def get_config_groups(core: CMMCorePlus) -> Iterable[ConfigGroup]:
     """Get the model for configuration groups."""
     channel_group = core.getChannelGroup()
     for group in core.getAvailableConfigGroups():
@@ -38,7 +37,7 @@ def get_config_groups(core: CMMCorePlus | UniMMCore) -> Iterable[ConfigGroup]:
         yield group_model
 
 
-def get_config_presets(core: CMMCorePlus | UniMMCore, group: str) -> Iterable[ConfigPreset]:
+def get_config_presets(core: CMMCorePlus, group: str) -> Iterable[ConfigPreset]:
     """Get all available configuration presets for a group."""
     for preset in core.getAvailableConfigs(group):
         preset_model = ConfigPreset(name=preset)
@@ -49,7 +48,7 @@ def get_config_presets(core: CMMCorePlus | UniMMCore, group: str) -> Iterable[Co
 
 
 def get_preset_settings(
-    core: CMMCorePlus | UniMMCore, group: str, preset: str
+    core: CMMCorePlus, group: str, preset: str
 ) -> Iterable[DevicePropertySetting]:
     for device, prop, value in core.getConfigData(group, preset):
         prop_model = DevicePropertySetting(

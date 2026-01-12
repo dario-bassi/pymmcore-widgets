@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from pymmcore_plus import CMMCorePlus
-from pymmcore_plus.experimental.unicore import UniMMCore
 
 from pymmcore_widgets.useq_widgets._grid import GridPlanWidget, Mode
 
@@ -28,9 +27,11 @@ class CoreConnectedGridPlanWidget(GridPlanWidget):
     """
 
     def __init__(
-        self, mmcore: CMMCorePlus | UniMMCore | None = None, parent: QWidget | None = None
+        self,
+        mmcore: CMMCorePlus | None = None,
+        parent: QWidget | None = None,
     ) -> None:
-        self._mmc = mmcore or UniMMCore() or CMMCorePlus.instance()
+        self._mmc = mmcore or CMMCorePlus.instance()
         self._core_xy_bounds = CoreXYBoundsControl(core=self._mmc)
 
         super().__init__(parent)

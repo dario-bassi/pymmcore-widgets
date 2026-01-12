@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from pymmcore_plus import CMMCorePlus
-from pymmcore_plus.experimental.unicore import UniMMCore
 from qtpy.QtWidgets import QDialog, QHBoxLayout, QLineEdit, QVBoxLayout, QWidget
 
 from ._device_property_table import DevicePropertyTable
@@ -22,10 +21,13 @@ class PropertyBrowser(QDialog):
     """
 
     def __init__(
-        self, *, parent: QWidget | None = None, mmcore: CMMCorePlus | UniMMCore | None = None
+        self,
+        *,
+        parent: QWidget | None = None,
+        mmcore: CMMCorePlus | None = None,
     ):
         super().__init__(parent=parent)
-        self._mmc = mmcore or UniMMCore() or CMMCorePlus.instance()
+        self._mmc = mmcore or CMMCorePlus.instance()
 
         self._prop_table = DevicePropertyTable(mmcore=self._mmc)
         self._device_filters = DeviceTypeFilters()

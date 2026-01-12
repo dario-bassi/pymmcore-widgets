@@ -26,41 +26,6 @@ if TYPE_CHECKING:
     from typing import Any
 
 
-def get_core_singleton(mmcore: CMMCorePlus | None = None) -> CMMCorePlus:
-    """Get the appropriate core singleton instance.
-    
-    This function ensures that only one core instance is used across all widgets,
-    preventing synchronization issues when events come from different cores.
-    
-    If mmcore is provided, it is returned as-is.
-    Otherwise, attempts to use the UniMMCore singleton if available,
-    falling back to CMMCorePlus.instance() if not.
-    
-    Parameters
-    ----------
-    mmcore : CMMCorePlus | None
-        Optional core instance to use instead of the singleton
-    
-    Returns
-    -------
-    CMMCorePlus
-        The core singleton instance to use
-    """
-    if mmcore is not None:
-        return mmcore
-    
-    try:
-        from pymmcore_plus.experimental.unicore import UniMMCore
-        if hasattr(UniMMCore, 'instance'):
-            try:
-                return UniMMCore.instance()
-            except Exception:
-                return CMMCorePlus.instance()
-        return CMMCorePlus.instance()
-    except ImportError:
-        return CMMCorePlus.instance()
-
-
 class ComboMessageBox(QDialog):
     """Dialog that presents a combo box of `items`."""
 
@@ -93,14 +58,14 @@ class ComboMessageBox(QDialog):
 
 
 def guess_channel_group(
-    mmcore: CMMCorePlus | UniMMCore | None = None, parent: QWidget | None = None
+    mmcore: CMMCorePlus | None = None, parent: QWidget | None = None
 ) -> str | None:
     """Try to update the list of channel group choices.
 
     1. get a list of potential channel groups from pymmcore
     2. if there is only one, use it, if there are > 1, show a dialog box
     """
-    mmcore = mmcore or UniMMCore() or CMMCorePlus.instance()
+    mmcore = mmcore or CMMCorePlus.instance()
     candidates = mmcore.getOrGuessChannelGroup()
     if len(candidates) == 1:
         return candidates[0]
@@ -112,14 +77,14 @@ def guess_channel_group(
 
 
 def guess_objective_or_prompt(
-    mmcore: CMMCorePlus | UniMMCore | None = None, parent: QWidget | None = None
+    mmcore: CMMCorePlus | None = None, parent: QWidget | None = None
 ) -> str | None:
     """Try to update the list of objective choices.
 
     1. get a list of potential objective devices from pymmcore
     2. if there is only one, use it, if there are >1, show a dialog box
     """
-    mmcore = mmcore or UniMMCore() or CMMCorePlus.instance()
+    mmcore = mmcore or CMMCorePlus.instance()
     candidates = mmcore.guessObjectiveDevices()
     if len(candidates) == 1:
         return candidates[0]
@@ -139,7 +104,7 @@ def block_core(obj: Any) -> AbstractContextManager:
     raise TypeError(f"Cannot block signals for {obj}")
 
 
-def fov_kwargs(core: CMMCorePlus | UniMMCore) -> dict:
+def fov_kwargs(core: CMMCorePlus) -> dict:
     """Return image width and height in micron to be used for the grid plan."""
     if px := core.getPixelSizeUm():
         *_, width, height = core.getROI()
@@ -246,6 +211,6 @@ def load_system_config(config: str = "", mmcore: CMMCorePlus | None = None) -> N
     `CMMCorePlus.instance().loadSystemConfiguration(...)` (instead of this function)
     and we need to handle that as well.  So this function shouldn't get too complex.
     """
-    mmc = mmcore or UniMMCore() or CMMCorePlus.instance()
+    mmc = mmcore or CMMCorePlus.instance()
     mmc.unloadAllDevices()
     mmc.loadSystemConfiguration(config or "MMConfig_demo.cfg")
