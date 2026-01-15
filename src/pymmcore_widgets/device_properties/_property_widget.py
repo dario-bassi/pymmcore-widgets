@@ -261,6 +261,7 @@ class ChoiceComboBox(QComboBox):
                 sorted_choices = sorted(choices, key=float)
             except ValueError:
                 sorted_choices = list(choices)
+            sorted_choices = [str(choice) for choice in choices]
             self.addItems(sorted_choices)
             # Restore previous selection if still valid
             if current in choices:
@@ -268,7 +269,7 @@ class ChoiceComboBox(QComboBox):
         finally:
             self.blockSignals(False)
 
-    def setValue(self, value: str) -> None:
+    def setValue(self, value: str | int) -> None:
         """Set the current value."""
         self.setCurrentText(str(value))
 

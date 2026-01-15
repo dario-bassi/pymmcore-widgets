@@ -380,7 +380,12 @@ class StageWidget(QWidget):
     def _on_radiobutton_toggled(self, state: bool) -> None:
         prop = XY_STAGE if self._is_2axis else FOCUS
         if state:
-            self._mmc.setProperty(CORE, prop, self._device)
+            try:
+                self._mmc.setProperty(CORE, prop, self._device)
+            except (RuntimeError, ValueError) as e:
+                # Core device may not support property setting for python devices
+                print(f"Warning: Could not set {prop} to {self._device}: {e}")
+                self._mmc.setProperty(CORE, prop, "")
         elif len(self._mmc.getLoadedDevicesOfType(self._dtype)) == 1:
             with signals_blocked(self._set_as_default_btn):
                 self._set_as_default_btn.setChecked(True)
